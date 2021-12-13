@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="ps5Flow" doc:id="da3c438d-740d-46ab-9513-247ecbcf6405" >
+		<http:listener doc:name="Listener" doc:id="ef19a912-ec47-41f5-b698-09787389fe61" config-ref="HTTP_Listener_config" path="/getp5"/>
+		<db:select doc:name="Select" doc:id="8e878c7d-6c71-4781-b1c0-fcdc4ce67b41" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from ps1]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="faecf14a-c04a-45e7-9460-e313af89dc49" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="18f36bf5-37eb-4bc4-b21b-4a12f684649e" />
+	</flow>
+</mule>

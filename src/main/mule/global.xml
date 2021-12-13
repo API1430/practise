@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9adfa7e1-5518-4339-bd8e-084e9ba1c017" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="1fc836a0-a202-4e09-a20a-0295c6513903" file="conig.yaml" />
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="f12b1589-766f-4114-88c3-bbc5bc9cb7a6" >
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.user}" password="${db.pwd}" database="${db.database}"/>
+	</db:config>
+	<configuration doc:name="Configuration" doc:id="af10fe8d-e7ad-477c-9db0-c66b41fe0703" defaultErrorHandler-ref="globalError_Handler" />
+	<error-handler name="globalError_Handler" doc:id="ad3000dd-f828-41db-83ca-0e982590d673" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0df9731e-1f61-46c5-9b78-ee8f31200a2c" type="ANY">
+			<ee:transform doc:name="Transform Message" doc:id="743d6c93-7fe2-4630-92da-9f1cacf4565a" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Global level error handler triggered!!"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-continue>
+	</error-handler>
+</mule>

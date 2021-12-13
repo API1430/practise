@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="ps5-suite.xml" />
+	<munit:test name="ps5Flow-test" doc:id="1c43d37e-6360-422b-8244-a0a4d5dae5ef" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="87338082-bef7-4d34-ac93-d8c3fbf7455f" >
+				<munit:payload value="#[readUrl('classpath://ps5Flowtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://ps5Flowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to ps5Flow" doc:id="d37c2653-4d72-41c8-a630-f009faa5bd5e" name="ps5Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="873be857-1962-4e45-8409-eea8febf76fa" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import ps5Flowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="ps5Flow-test1" doc:id="1927d35a-4f0a-4421-a843-849832388450" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="4681b84b-d5be-4bf1-8e53-7a8d8dffee1a" >
+				<munit:payload value="#[readUrl('classpath://ps5Flowtest1\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://ps5Flowtest1\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to ps5Flow" doc:id="c78b83ab-2047-413e-bbce-d5bc5411ac8c" name="ps5Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="c0547bd3-073c-49fa-a243-a8ff1fdd177d" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import ps5Flowtest1::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
